@@ -5,7 +5,19 @@ import java.io.File
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = File("inputs", "$name.txt").readLines()
+fun readInput(name: String): List<String> =
+    File("inputs", "$name.txt").readLines()
+
+/**
+ * Groups lines by a separator line
+ */
+fun groupLines(lines: List<String>): List<List<String>> =
+    lines.fold(listOf(listOf())) { acc, line ->
+        if (line.isEmpty())
+            acc + listOf(listOf())
+        else
+            acc.dropLast(1) + listOf(acc.last() + line)
+    }
 
 /**
  * A verbose encapsulation of check()
