@@ -37,15 +37,15 @@ fun <T> expect(got: T, expected: T) {
 /**
  * Computes the GCD of its arguments
  */
-fun getGCD(vararg values: Int): Int =
+fun getGCD(vararg values: Long): Long =
     values.toSet().reduce { left, right ->
         var a = left
         var b = right
 
         while (a != b) {
             when {
-                (a == 0) -> return@reduce b
-                (b == 0) -> return@reduce a
+                (a == 0L) -> return@reduce b
+                (b == 0L) -> return@reduce a
                 (a > b) -> a -= b * (a / b)
                 else -> b -= a * (b / a)
             }
@@ -57,6 +57,47 @@ fun getGCD(vararg values: Int): Int =
 /**
  * Computes the LCM of its arguments
  */
-fun getLCM(vararg values: Int): Int = values.toSet().reduce { a, b ->
+fun getLCM(vararg values: Long): Long = values.toSet().reduce { a, b ->
     maxOf(a, b) / getGCD(a, b) * minOf(a, b)
+}
+
+/**
+ * Computes the modular inverse of a value by modulus mod
+ */
+fun getModularInverse(value: Long, mod: Long): Long {
+    if (mod == 1L)
+        return 0
+
+    var (n, m, x, y) = listOf(value, mod, 1, 0)
+
+    while (n > 1) {
+        if (m == 0L)
+            throw Error("not inversible")
+
+        val (nextMod, nextN, nextX, nextY) = listOf(n % m, m, y, x - n / m * y)
+
+        m = nextMod
+        n = nextN
+        x = nextX
+        y = nextY
+    }
+
+    return (x + mod) % mod
+}
+
+/*
+ * Chinese Remainder Theorem implementation. Takes a list of tuples (rem, mod)
+ * where each rem is a remainder and each mod is a modulus and returns an
+ * integer `n` for which each `n % mod = rem`.
+ *
+ * Assumes all `mod`s are coprime.
+ */
+fun getCRT(values: List<Pair<Int, Int>>): Long {
+    val prod = values.fold(1L) { acc, (_, mod) -> acc * mod }
+
+    return values.sumOf { (rem, mod) ->
+        val p = prod / mod
+
+        rem * getModularInverse(p, mod.toLong()) * p
+    } % prod
 }
