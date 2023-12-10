@@ -4,7 +4,7 @@ import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
 data class Coords2D(var x: Int, var y: Int): Comparable<Coords2D> {
-    val delta: Float get() = sqrt((x * x + y * y) * 1f)
+    val delta: Float get() = sqrt(1f * x * x + y * y)
 
     val manhattanDelta: Int get() = x.absoluteValue + y.absoluteValue
 
@@ -43,6 +43,9 @@ data class Coords2D(var x: Int, var y: Int): Comparable<Coords2D> {
                     Coords2D(x, y)
                 }
             }
+
+        fun iterateOnField(field: List<String>) : Sequence<Coords2D> =
+            iterate(Coords2D(field.first().length, field.size))
 
         fun getLowerBound(coords: Iterable<Coords2D>): Coords2D =
             coords.reduce { (ax, ay), (bx, by) ->

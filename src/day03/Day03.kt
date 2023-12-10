@@ -9,7 +9,7 @@ data class EnginePart(val symbol: Char, val numbers: List<Int>)
 fun getSymbolNumbers(input: List<String>): Sequence<EnginePart> {
     val size = Coords(input.first().length, input.size)
 
-    return Coords.iterate(size).mapNotNull { coords ->
+    return Coords.iterateOnField(input).mapNotNull { coords ->
         val c = input[coords.y][coords.x]
 
         if (c.isDigit() || c == '.')
