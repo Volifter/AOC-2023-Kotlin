@@ -101,3 +101,6 @@ fun getCRT(values: List<Pair<Int, Int>>): Long {
         rem * getModularInverse(p, mod.toLong()) * p
     } % prod
 }
+
+fun <T> Sequence<T>.asProgressing(): Sequence<T> =
+  iterator().let { Sequence { it } }
