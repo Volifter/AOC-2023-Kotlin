@@ -102,5 +102,15 @@ fun getCRT(values: List<Pair<Int, Int>>): Long {
     } % prod
 }
 
+/*
+ * Makes a sequence progressing, i.e. forces its iterator to advance after each
+ * read
+ */
 fun <T> Sequence<T>.asProgressing(): Sequence<T> =
   iterator().let { Sequence { it } }
+
+fun IntRange.intersectWith(other: IntRange): IntRange {
+    val (min, max) = listOf(this, other).sortedBy { it.first }
+
+    return maxOf(min.first, max.first)..minOf(min.last, max.last)
+}
